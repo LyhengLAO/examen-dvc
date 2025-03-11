@@ -1,0 +1,53 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/data/data_preprocessed.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 83524b9ab09f4ac15af2c899d45e60eb.dir
+      size: 333773
+      nfiles: 2
+    - path: src/data/data_preprocessed.py
+      hash: md5
+      md5: e27cbd4daf2f107856ff153371edc00c
+      size: 1211
+    outs:
+    - path: data/processed_data
+      hash: md5
+      md5: ce577e06114c1d9c1f9b8bd4b49c23a2.dir
+      size: 578838
+      nfiles: 6
+  train:
+    cmd: python ./src/models/Grid_train.py
+    deps:
+    - path: data/processed_data/
+      hash: md5
+      md5: ce577e06114c1d9c1f9b8bd4b49c23a2.dir
+      size: 578838
+      nfiles: 6
+    - path: src/models/Grid_train.py
+      hash: md5
+      md5: aae6199e4936e6b769612a72d8687994
+      size: 804
+    outs:
+    - path: models/final_model.pkl
+      hash: md5
+      md5: b1676f25cae9853287531ebc47035399
+      size: 3283643
+  evale:
+    cmd: python src/models/evaluate.py
+    deps:
+    - path: models/final_model.pkl
+      hash: md5
+      md5: b1676f25cae9853287531ebc47035399
+      size: 3283643
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 40c31139cde17e8acb9410aec83d6714
+      size: 716
+    outs:
+    - path: metrics/scores.json
+      hash: md5
+      md5: 2096d18ce5f173950a1ecde4a0d42323
+      size: 54

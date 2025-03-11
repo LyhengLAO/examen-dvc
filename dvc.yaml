@@ -1,0 +1,23 @@
+stages:
+  prepare:
+    cmd: python src/data/data_preprocessed.py
+    deps:
+    - data/raw
+    - src/data/data_preprocessed.py
+    outs:
+    - data/processed_data
+  train:
+    cmd: python ./src/models/Grid_train.py
+    deps:
+    - data/processed_data/
+    - src/models/Grid_train.py
+    outs:
+    - models/final_model.pkl
+  evale:
+    cmd: python src/models/evaluate.py
+    deps:
+    - models/final_model.pkl
+    - src/models/evaluate.py
+    metrics:
+    - metrics/scores.json:
+        cache: false
